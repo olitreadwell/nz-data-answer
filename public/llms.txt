@@ -1,0 +1,42 @@
+# NZ Data Answer
+
+> Ask a question about Aotearoa New Zealand public data and get an answer that names the datasets behind it.
+
+## Pages
+
+- [Home](/)
+- [Contact](/contact)
+- [Feedback](/feedback)
+- [Help](/help)
+- [Login](/login)
+
+## APIs
+
+- [Ask](/api/ask)
+- [Challenge](/api/challenge)
+- [Contact](/api/contact)
+- [Feedback](/api/feedback)
+- [Hello](/api/hello)
+- [OpenAPI document](/api/openapi.json)
+- [Health check](/health)
+
+## Documentation
+
+- docs/a11y.md
+- docs/ai.md
+- docs/api.md
+- docs/audits.md
+- docs/auth.md
+- docs/ci-optimization.md
+- docs/contact.md
+- docs/deploy.md
+- docs/engineering.md
+- docs/faq.md
+- docs/getting-started.md
+- docs/llm-agent-optimization.md
+- docs/onboarding.md
+- docs/philosophy.md
+- docs/style-guide.md
+- docs/template-sync.md
+- docs/testing.md
+

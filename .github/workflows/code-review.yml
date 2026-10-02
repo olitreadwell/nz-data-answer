@@ -1,0 +1,35 @@
+name: Code Review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: code-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  alibaba-open-code-review:
+    name: Alibaba open-code-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run open-code-review
+        # Advisory gate: posts review comments when an LLM endpoint is
+        # configured, but must never block a merge solely because the
+        # review secrets are absent on a repo.
+        continue-on-error: true
+        uses: alibaba/open-code-review@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+        env:
+          OCR_LLM_URL: ${{ secrets.LLM_BASE_URL }}
+          OCR_LLM_TOKEN: ${{ secrets.LLM_API_KEY }}
+          OCR_LLM_MODEL: ${{ secrets.LLM_MODEL }}
