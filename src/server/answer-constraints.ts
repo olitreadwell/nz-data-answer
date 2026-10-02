@@ -46,6 +46,12 @@ export function enforceAnswerFormat(answer: string, maxWords = MAX_ANSWER_WORDS)
     .replace(/(^|\s)\*(\S)/g, '$1$2')
     .replace(/—/g, ', ')
     .replace(/–/g, '-')
+    // Drop the clause that talks about the plumbing, keeping the sentence
+    // readable: "not provided in the excerpts" becomes "not provided".
+    .replace(
+      /\s+(?:in|from|by)\s+the\s+(?:supplied\s+|provided\s+)?(?:excerpts?|data|sources?|context)\b/gi,
+      ''
+    )
     .replace(/\s+/g, ' ')
     .replace(/\s+([,.;:!?])/g, '$1')
     .trim();

@@ -40,6 +40,22 @@ describe('enforceAnswerFormat', () => {
       'New Zealand had 23.3 million sheep in 2026, according to the Livestock Numbers by Regional Council table.';
     expect(enforceAnswerFormat(good)).toBe(good);
   });
+
+  it('removes the clause that describes where the information came from', () => {
+    expect(
+      enforceAnswerFormat(
+        'The number of sheep is not provided in the excerpts. Nothing else applies.'
+      )
+    ).toBe('The number of sheep is not provided. Nothing else applies.');
+    expect(
+      enforceAnswerFormat('The median annual earnings are not available from the supplied data.')
+    ).toBe('The median annual earnings are not available.');
+  });
+
+  it('leaves a sentence about New Zealand data alone', () => {
+    const good = 'The data comes from Stats NZ and covers every region.';
+    expect(enforceAnswerFormat(good)).toBe(good);
+  });
 });
 
 describe('findAnswerViolations', () => {
