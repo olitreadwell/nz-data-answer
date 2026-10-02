@@ -47,6 +47,31 @@ export const MAX_NZ_SOURCE_SUMMARY_LENGTH = 240;
 /** How many terms one catalogue query may carry. */
 export const MAX_NZ_SOURCE_QUERY_TERMS = 6;
 
+/**
+ * Identifies this app to the public APIs it reads.
+ *
+ * The data.govt.nz catalogue answers a plain server-side fetch from a cloud
+ * region with an HTML holding page, and naming the client is the polite half
+ * of asking for the API instead. The failures are still reported on the page
+ * when a source refuses.
+ */
+export const NZ_SOURCE_USER_AGENT =
+  'nz-data-answer/0.1.0 (+https://github.com/olitreadwell/nz-data-answer)';
+
+/**
+ * Wrap a fetch so every connector request carries this app's user agent.
+ *
+ * @param fetchImpl - The fetch to wrap
+ * @returns A fetch that adds the `user-agent` header
+ */
+export function withNzSourceUserAgent(fetchImpl: typeof globalThis.fetch): typeof globalThis.fetch {
+  return ((input: RequestInfo | URL, init?: RequestInit) =>
+    fetchImpl(input, {
+      ...init,
+      headers: { ...(init?.headers ?? {}), 'user-agent': NZ_SOURCE_USER_AGENT },
+    })) as typeof globalThis.fetch;
+}
+
 // Catalogue search is keyword matching, not question answering: leaving the
 // sentence intact returns datasets that merely share its stopwords.
 const QUERY_STOPWORDS = new Set([
@@ -181,9 +206,11 @@ export async function searchNzSources(
   const catalogueExcerpts: NzSourceExcerpt[] = [];
   const explorerExcerpts: NzSourceExcerpt[] = [];
 
+  const connectorFetch = withNzSourceUserAgent(fetchImpl);
+
   const [catalogue, explorer] = await Promise.allSettled([
-    searchDataGovtNzDatasets(buildNzSourceQuery(question, true), fetchImpl),
-    searchAdeTables(buildNzSourceQuery(question), { limit: 10, fetchImpl }),
+    searchDataGovtNzDatasets(buildNzSourceQuery(question, true), connectorFetch),
+    searchAdeTables(buildNzSourceQuery(question), { limit: 10, fetchImpl: connectorFetch }),
   ]);
 
   if (catalogue.status === 'fulfilled') {

@@ -44,8 +44,16 @@ const docsCsp = [
   'upgrade-insecure-requests',
 ].join('; ');
 
+// Vercel's platform build sets NEXT_ADAPTER_PATH to its own Next adapter and
+// owns the output itself; `output: 'standalone'` alongside it makes the
+// deployment answer 404 for every route. Keep standalone output for the local
+// smoke script and the Dockerfile, and let the platform adapter take over.
+const standaloneOutput: Pick<NextConfig, 'output'> = process.env.NEXT_ADAPTER_PATH
+  ? {}
+  : { output: 'standalone' };
+
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  ...standaloneOutput,
   reactStrictMode: true,
   allowedDevOrigins: ['127.0.0.1'],
   // The NZ connectors package is vendored as workspace source, not a built

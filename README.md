@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/olitreadwell/nz-data-answer/actions/workflows/ci.yml/badge.svg)](https://github.com/olitreadwell/nz-data-answer/actions/workflows/ci.yml)
 
+**Live:** <https://nz-data-answer.vercel.app>
+
 Ask a question about Aotearoa New Zealand public data and get an answer that
 names the datasets behind it. Two keyless sources are searched live, the
 matching datasets are handed to a model as fenced evidence, and the answer

@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   MAX_NZ_SOURCE_SUMMARY_LENGTH,
+  NZ_SOURCE_USER_AGENT,
   buildNzSourceQuery,
   searchNzSources,
   summariseSourceNotes,
+  withNzSourceUserAgent,
 } from '@/server/nz-source-search';
 
 const CATALOGUE_PAYLOAD = {
@@ -93,6 +95,20 @@ describe('buildNzSourceQuery', () => {
 
   it('falls back to the question when every term is a stopword', () => {
     expect(buildNzSourceQuery('who is it')).toBe('who is it');
+  });
+});
+
+describe('withNzSourceUserAgent', () => {
+  it('adds the app user agent to every connector request', async () => {
+    const seen: Array<Record<string, string>> = [];
+    const spyFetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+      seen.push(init?.headers as Record<string, string>);
+      return { ok: true, status: 200, json: async () => ({}) } as unknown as Response;
+    }) as unknown as typeof globalThis.fetch;
+
+    await withNzSourceUserAgent(spyFetch)('https://example.test');
+
+    expect(seen[0]?.['user-agent']).toBe(NZ_SOURCE_USER_AGENT);
   });
 });
 
