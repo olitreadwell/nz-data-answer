@@ -22,7 +22,13 @@ const REPORT_PATH = join(REPO_ROOT, 'evals', 'report.json');
 
 const baseUrl = (process.env.AI_BASE_URL?.trim() || 'https://ollama.com/v1').replace(/\/+$/, '');
 const model = process.env.AI_MODEL?.trim() || 'gpt-oss:120b';
+// Grade with a stronger model than the one under test when you have one, so
+// the judge is not scoring its own answer.
+const judgeModel = process.env.AI_JUDGE_MODEL?.trim() || model;
 const apiKey = process.env.AI_API_KEY?.trim();
+// Reasoning models bill their thinking as output tokens, so a small budget can
+// be spent before the answer starts. Give the eval room to see a full answer.
+const maxOutputTokens = Number(process.env.AI_EVAL_MAX_TOKENS ?? 2048);
 
 /**
  * Trim a model answer to something a terminal and a diff can hold.
@@ -39,13 +45,19 @@ function trimAnswer(text, limit = 600) {
  * Ask the provider for one chat completion.
  *
  * @param {Array<{role: string, content: string}>} messages - Conversation to send
+ * @param {string} [modelName] - Model to call, defaults to AI_MODEL
  * @returns {Promise<{text: string, inputTokens: number, outputTokens: number}>} The answer and its usage
  */
-async function callModel(messages) {
+async function callModel(messages, modelName = model) {
   const response = await fetch(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({ model, messages, max_tokens: 512, temperature: 0 }),
+    body: JSON.stringify({
+      model: modelName,
+      messages,
+      max_tokens: maxOutputTokens,
+      temperature: 0,
+    }),
   });
   if (!response.ok) {
     throw new Error(`provider responded ${response.status}`);
@@ -80,7 +92,8 @@ function runDeterministicChecks(answer, expect = {}) {
     if (lower.includes(String(phrase).toLowerCase())) failures.push(`must not appear: ${phrase}`);
   }
   for (const pattern of expect.mustMatch ?? []) {
-    if (!new RegExp(pattern).test(answer)) failures.push(`no match: ${pattern}`);
+    // Case-insensitive always: a regex flag written as (?i) is not valid here.
+    if (!new RegExp(pattern, 'i').test(answer)) failures.push(`no match: ${pattern}`);
   }
   if (typeof expect.minChars === 'number' && answer.length < expect.minChars) {
     failures.push(`shorter than ${expect.minChars} characters`);
@@ -100,13 +113,17 @@ function runDeterministicChecks(answer, expect = {}) {
  */
 async function runJudge(answer, judge) {
   const threshold = judge.threshold ?? 4;
-  const result = await callModel([
-    {
-      role: 'system',
-      content: 'You grade answers. Reply with JSON only: {"score": 1-5, "reason": "one sentence"}.',
-    },
-    { role: 'user', content: `Rubric: ${judge.rubric}\n\nAnswer to grade:\n${answer}` },
-  ]);
+  const result = await callModel(
+    [
+      {
+        role: 'system',
+        content:
+          'You grade answers. Reply with JSON only: {"score": 1-5, "reason": "one sentence"}.',
+      },
+      { role: 'user', content: `Rubric: ${judge.rubric}\n\nAnswer to grade:\n${answer}` },
+    ],
+    judgeModel
+  );
   const parsed = JSON.parse(result.text.replace(/^```(?:json)?\s*|\s*```$/g, ''));
   return { score: Number(parsed.score), threshold, reason: String(parsed.reason ?? '') };
 }
@@ -173,6 +190,7 @@ async function main() {
 
   const report = {
     model,
+    judgeModel,
     baseUrl,
     withJudge,
     ranAt: new Date().toISOString(),

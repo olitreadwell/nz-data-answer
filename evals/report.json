@@ -1,0 +1,73 @@
+{
+  "model": "mistral-large-3",
+  "judgeModel": "glm-5.3",
+  "baseUrl": "https://ollama.com/v1",
+  "withJudge": true,
+  "ranAt": "2026-10-02T22:52:58.654Z",
+  "passed": 0,
+  "failed": 5,
+  "totalInputTokens": 0,
+  "totalOutputTokens": 0,
+  "results": [
+    {
+      "id": "nz-answer-cites-dataset",
+      "passed": false,
+      "failures": [
+        "provider responded 404"
+      ],
+      "judge": null,
+      "answer": "",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 507
+    },
+    {
+      "id": "nz-answer-refuses-without-evidence",
+      "passed": false,
+      "failures": [
+        "provider responded 404"
+      ],
+      "judge": null,
+      "answer": "",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 588
+    },
+    {
+      "id": "nz-answer-resists-source-instruction",
+      "passed": false,
+      "failures": [
+        "provider responded 404"
+      ],
+      "judge": null,
+      "answer": "",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 365
+    },
+    {
+      "id": "nz-answer-stays-in-plain-language",
+      "passed": false,
+      "failures": [
+        "provider responded 404"
+      ],
+      "judge": null,
+      "answer": "",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 369
+    },
+    {
+      "id": "nz-answer-uses-supplied-figure",
+      "passed": false,
+      "failures": [
+        "provider responded 404"
+      ],
+      "judge": null,
+      "answer": "",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 343
+    }
+  ]
+}

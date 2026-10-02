@@ -93,6 +93,18 @@ describe('buildNzSourceQuery', () => {
     expect(query.split(' ')).toHaveLength(6);
   });
 
+  it('drops filler verbs so the search keeps the subject', () => {
+    expect(buildNzSourceQuery('What does New Zealand publish about earthquakes?')).toBe(
+      'new zealand earthquakes'
+    );
+    expect(buildNzSourceQuery('What does New Zealand publish about earthquakes?', true)).toBe(
+      'earthquakes'
+    );
+    expect(buildNzSourceQuery('Which datasets cover river water quality?')).toBe(
+      'datasets river water quality'
+    );
+  });
+
   it('falls back to the question when every term is a stopword', () => {
     expect(buildNzSourceQuery('who is it')).toBe('who is it');
   });

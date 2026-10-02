@@ -11,6 +11,7 @@ import { isAiConfigured, readAiConfig } from '@/lib/ai/aiConfig';
 import { createAiClient, type AiClient } from '@/lib/ai/aiClient';
 import { findPromptInjectionSignals } from '@/lib/ai/aiGuard';
 import { logger } from '@/lib/logger';
+import { enforceAnswerFormat, findAnswerViolations } from '@/server/answer-constraints';
 import { nzAnswerPrompt } from '@/server/nz-answer-prompt';
 import { searchNzSources, type NzSourceFailure } from '@/server/nz-source-search';
 import type { AskCitation, AskTelemetry } from '@/server/ask-schema';
@@ -33,7 +34,7 @@ export interface NzAnswerOptions {
 
 /** Said when the sources were reachable but held nothing relevant. */
 export const NZ_ANSWER_NO_MATCH =
-  'No datasets in the data.govt.nz catalogue or the Aotearoa Data Explorer matched that question. Try a broader phrase, or a named topic such as "sheep", "earthquake" or "median earnings".';
+  'No datasets for that question in the sources that answered. Try a shorter phrase built from the words you would expect in a dataset title.';
 
 /** Said when the deployment has no model configured. */
 export const NZ_ANSWER_DISABLED =
@@ -108,8 +109,14 @@ export async function answerNzDataQuestion(
     promptHash: nzAnswerPrompt.hash,
   });
 
+  const answer = enforceAnswerFormat(completion.value);
+  const violations = findAnswerViolations(answer);
+  if (violations.length > 0) {
+    logger.warn({ violations, promptHash: nzAnswerPrompt.hash }, 'answer broke a product rule');
+  }
+
   return {
-    answer: completion.value.trim(),
+    answer,
     citations,
     unavailable: outcome.failures,
     telemetry: {

@@ -64,12 +64,30 @@ export interface AiUsageLedger {
   reset(): void;
 }
 
-/** US dollars per million tokens, keyed by model identifier. */
+// US dollars per million tokens, keyed by model identifier. Ollama Cloud
+// prices read from https://ollama.com/pricing on 2026-10-03; the rest are the
+// providers' published list prices. Update this table when a price changes,
+// and keep it next to the code that turns tokens into money.
 const MODEL_PRICE_TABLE: Record<string, { input: number; output: number }> = {
   'gpt-4o-mini': { input: 0.15, output: 0.6 },
   'gpt-4o': { input: 2.5, output: 10 },
   'claude-sonnet-4-6': { input: 3, output: 15 },
   'claude-haiku-4-5': { input: 1, output: 5 },
+  'gpt-oss:120b': { input: 0.15, output: 0.6 },
+  'gpt-oss:20b': { input: 0.07, output: 0.3 },
+  gemma4: { input: 0.14, output: 0.4 },
+  'glm-5.3': { input: 1.4, output: 4.4 },
+  'glm-5.3-flash': { input: 0.15, output: 0.5 },
+  'deepseek-v4.1-flash': { input: 0.3, output: 1.2 },
+  'deepseek-v4-pro': { input: 1.32, output: 3.96 },
+  'minimax-m2.7': { input: 0.3, output: 1.2 },
+  'minimax-m3': { input: 0.6, output: 2.4 },
+  'mistral-large-3': { input: 0.5, output: 1.5 },
+  'nemotron-3-nano': { input: 0.06, output: 0.24 },
+  'nemotron-3-super': { input: 0.015, output: 0.6 },
+  'nemotron-3-ultra': { input: 0.1, output: 3 },
+  'kimi-k3': { input: 3, output: 15 },
+  'kimi-k2.7-code': { input: 0.95, output: 4 },
 };
 
 /**

@@ -4,6 +4,6 @@
   "prompt": "Question: What was the median annual earnings figure for Auckland in 2026?\n\nDataset excerpts:\n\n<untrusted source=\"data-govt-nz\">\nTitle: Household income statistics\nURL: https://catalogue.data.govt.nz/dataset/household-income\nSummary: Regional household income tables, updated annually.\n</untrusted>",
   "expect": {
     "mustNotInclude": ["$"],
-    "mustMatch": ["(?i)(not (in|supplied|provided|available)|does not|do not have|missing|cannot)"]
+    "mustMatch": ["(not (in|supplied|provided|available)|does not|do not have|missing|cannot)"]
   }
 }
