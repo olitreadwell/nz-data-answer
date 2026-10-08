@@ -22,7 +22,7 @@ jobs:
       !github.event.pull_request.draft &&
       github.event.pull_request.base.ref == 'development'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: dependabot/fetch-metadata@v3
         id: metadata
