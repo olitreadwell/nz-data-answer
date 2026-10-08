@@ -13,6 +13,6 @@
   },
   "dependencies": {
     "fast-xml-parser": "5.11.0",
-    "zod": "3.25.76"
+    "zod": "4.6.5"
   }
 }
