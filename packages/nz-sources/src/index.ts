@@ -19,11 +19,7 @@ export type {
   ArcgisHubResult,
 } from './arcgisHub';
 /** data.govt.nz dataset search. */
-export {
-  searchDataGovtNzDatasets,
-  parseDataGovtNzDatasets,
-  dataGovtNzAdapter,
-} from './dataGovtNz';
+export { searchDataGovtNzDatasets, parseDataGovtNzDatasets, dataGovtNzAdapter } from './dataGovtNz';
 /** data.govt.nz dataset search types. */
 export type { DataGovtNzDataset, DataGovtNzSearchResult } from './dataGovtNz';
 /** data.govt.nz datastore rows (MSD benefits). */

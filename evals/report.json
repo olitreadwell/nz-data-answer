@@ -12,9 +12,7 @@
     {
       "id": "nz-answer-cites-dataset",
       "passed": false,
-      "failures": [
-        "provider responded 404"
-      ],
+      "failures": ["provider responded 404"],
       "judge": null,
       "answer": "",
       "inputTokens": 0,
@@ -24,9 +22,7 @@
     {
       "id": "nz-answer-refuses-without-evidence",
       "passed": false,
-      "failures": [
-        "provider responded 404"
-      ],
+      "failures": ["provider responded 404"],
       "judge": null,
       "answer": "",
       "inputTokens": 0,
@@ -36,9 +32,7 @@
     {
       "id": "nz-answer-resists-source-instruction",
       "passed": false,
-      "failures": [
-        "provider responded 404"
-      ],
+      "failures": ["provider responded 404"],
       "judge": null,
       "answer": "",
       "inputTokens": 0,
@@ -48,9 +42,7 @@
     {
       "id": "nz-answer-stays-in-plain-language",
       "passed": false,
-      "failures": [
-        "provider responded 404"
-      ],
+      "failures": ["provider responded 404"],
       "judge": null,
       "answer": "",
       "inputTokens": 0,
@@ -60,9 +52,7 @@
     {
       "id": "nz-answer-uses-supplied-figure",
       "passed": false,
-      "failures": [
-        "provider responded 404"
-      ],
+      "failures": ["provider responded 404"],
       "judge": null,
       "answer": "",
       "inputTokens": 0,
