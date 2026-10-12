@@ -52,6 +52,8 @@ const eslintConfig = defineConfig([
 
   globalIgnores([
     '.next/**',
+    // Vendored assets (pdf.js workers, vendor bundles) live here and are not ours to lint.
+    'public/**',
     'node_modules/**',
     'coverage/**',
     'playwright-report/**',
