@@ -17,7 +17,7 @@ export interface DataGovtDatastoreResult {
 /** The default resource the adapter probes: MSD national-level main benefit data. */
 export const MSD_BENEFIT_RESOURCE_ID = '9144a616-9ab1-4475-972b-ac42c1f891b7';
 
-const DATA_GOVT_NZ_ROW_SCHEMA = z.record(z.union([z.string(), z.number(), z.boolean(), z.null()]));
+const DATA_GOVT_NZ_ROW_SCHEMA = z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()]));
 
 const DATA_GOVT_NZ_DATASTORE_SCHEMA = z.object({
   success: z.literal(true),
